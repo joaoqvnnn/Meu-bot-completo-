@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pagamentos | Painel Administrativo | Larizinha Store</title>
-  <meta name="description" content="Gerenciamento de pagamentos da Larizinha Store." />
+  <title>Recargas | Painel Administrativo | Larizinha Store</title>
+  <meta name="description" content="Gerenciamento de recargas de saldo da Larizinha Store." />
   <style>
     /* ===== RESET & BASE ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -60,6 +60,10 @@
     .btn-outline { border: 1px solid var(--border); }
     .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
     .btn-sm { padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; }
+    .btn-success { color: var(--accent); border: 1px solid rgba(0,212,170,0.3); }
+    .btn-success:hover { background: rgba(0,212,170,0.1); }
+    .btn-danger { color: #ff6b6b; border: 1px solid rgba(255,107,107,0.3); }
+    .btn-danger:hover { background: rgba(255,107,107,0.1); }
 
     /* ===== FILTROS ===== */
     .filters { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
@@ -78,7 +82,6 @@
     .status-approved { background: rgba(0,212,170,0.15); color: var(--accent); }
     .status-expired { background: rgba(255,107,107,0.15); color: #ff6b6b; }
     .status-cancelled { background: rgba(255,107,107,0.15); color: #ff6b6b; }
-    .status-refunded { background: rgba(0,123,255,0.15); color: #4da3ff; }
     .action-buttons { display: flex; gap: 5px; }
 
     /* ===== MODAL ===== */
@@ -131,8 +134,8 @@
       <a href="estoque.html" class="sidebar-link"><span class="icon">📋</span> Estoque</a>
       <a href="pedidos.html" class="sidebar-link"><span class="icon">🛒</span> Pedidos</a>
       <div class="sidebar-section">Financeiro</div>
-      <a href="pagamentos.html" class="sidebar-link active"><span class="icon">💳</span> Pagamentos</a>
-      <a href="recargas.html" class="sidebar-link"><span class="icon">🔋</span> Recargas</a>
+      <a href="pagamentos.html" class="sidebar-link"><span class="icon">💳</span> Pagamentos</a>
+      <a href="recargas.html" class="sidebar-link active"><span class="icon">🔋</span> Recargas</a>
       <a href="carteira.html" class="sidebar-link"><span class="icon">👛</span> Carteira</a>
       <a href="giftcards.html" class="sidebar-link"><span class="icon">🎁</span> Gift Cards</a>
       <a href="afiliados.html" class="sidebar-link"><span class="icon">🤝</span> Afiliados</a>
@@ -170,7 +173,7 @@
     <div class="topbar">
       <div style="display:flex;align-items:center;gap:15px;">
         <button class="sidebar-toggle" id="sidebarToggle">☰</button>
-        <h1>Pagamentos</h1>
+        <h1>Recargas</h1>
       </div>
     </div>
 
@@ -185,34 +188,28 @@
         <option value="aprovado">Aprovado</option>
         <option value="expirado">Expirado</option>
         <option value="cancelado">Cancelado</option>
-        <option value="reembolsado">Reembolsado</option>
       </select>
-      <select id="metodoFilter">
-        <option value="">Todos os métodos</option>
-        <option value="pix">PIX</option>
-        <option value="cartao">Cartão</option>
-        <option value="saldo">Saldo</option>
-      </select>
-      <button class="btn btn-outline" onclick="carregarPagamentos(1)">Filtrar</button>
+      <button class="btn btn-outline" onclick="carregarRecargas(1)">Filtrar</button>
     </div>
 
     <!-- Tabela -->
     <div class="table-container">
-      <div id="loading" class="loading"><div class="spinner"></div><p>Carregando pagamentos...</p></div>
-      <table id="pagamentosTable" style="display:none;">
+      <div id="loading" class="loading"><div class="spinner"></div><p>Carregando recargas...</p></div>
+      <table id="recargasTable" style="display:none;">
         <thead>
           <tr>
             <th>ID</th>
             <th>Usuário</th>
             <th>Valor</th>
-            <th>Método</th>
+            <th>Bônus</th>
+            <th>Total</th>
             <th>Status</th>
             <th>Referência</th>
             <th>Data</th>
             <th>Ações</th>
           </tr>
         </thead>
-        <tbody id="pagamentosBody"></tbody>
+        <tbody id="recargasBody"></tbody>
       </table>
       <div class="pagination" id="pagination"></div>
     </div>
@@ -221,8 +218,8 @@
   <!-- MODAL DETALHES -->
   <div class="modal-overlay" id="modalDetalhes">
     <div class="modal">
-      <h3>Detalhes do Pagamento</h3>
-      <div id="detalhesPagamento"></div>
+      <h3>Detalhes da Recarga</h3>
+      <div id="detalhesRecarga"></div>
       <div class="modal-buttons" id="modalActions">
         <button class="btn btn-outline" onclick="fecharModal('modalDetalhes')">Fechar</button>
       </div>
@@ -233,57 +230,55 @@
     const API_URL = '/api/admin';
     let paginaAtual = 1;
     let totalPaginas = 1;
-    let pagamentoSelecionado = null;
+    let recargaSelecionada = null;
 
     // ===== SIDEBAR TOGGLE =====
     document.getElementById('sidebarToggle').addEventListener('click', () => {
       document.getElementById('sidebar').classList.toggle('open');
     });
 
-    // ===== CARREGAR PAGAMENTOS =====
-    async function carregarPagamentos(pagina = 1) {
+    // ===== CARREGAR RECARGAS =====
+    async function carregarRecargas(pagina = 1) {
       const loading = document.getElementById('loading');
-      const table = document.getElementById('pagamentosTable');
-      const tbody = document.getElementById('pagamentosBody');
+      const table = document.getElementById('recargasTable');
+      const tbody = document.getElementById('recargasBody');
       loading.style.display = 'block';
       table.style.display = 'none';
 
       const termo = document.getElementById('searchInput').value.trim();
       const status = document.getElementById('statusFilter').value;
-      const metodo = document.getElementById('metodoFilter').value;
 
-      let url = `${API_URL}/payments?page=${pagina}&limit=10`;
+      let url = `${API_URL}/recargas?page=${pagina}&limit=10`;
       if (termo) url += `&search=${encodeURIComponent(termo)}`;
       if (status) url += `&status=${status}`;
-      if (metodo) url += `&metodo=${metodo}`;
 
       try {
         const response = await fetch(url);
-        if (!response.ok) throw new Error('Erro ao carregar pagamentos');
+        if (!response.ok) throw new Error('Erro ao carregar recargas');
         const data = await response.json();
         paginaAtual = data.page || pagina;
         totalPaginas = data.totalPages || 1;
         tbody.innerHTML = '';
 
-        data.payments.forEach(pagamento => {
+        data.recargas.forEach(recarga => {
           let statusClass = 'status-pending';
-          if (pagamento.status === 'aprovado') statusClass = 'status-approved';
-          else if (pagamento.status === 'expirado') statusClass = 'status-expired';
-          else if (pagamento.status === 'cancelado') statusClass = 'status-cancelled';
-          else if (pagamento.status === 'reembolsado') statusClass = 'status-refunded';
+          if (recarga.status === 'aprovado') statusClass = 'status-approved';
+          else if (recarga.status === 'expirado') statusClass = 'status-expired';
+          else if (recarga.status === 'cancelado') statusClass = 'status-cancelled';
 
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td>#${pagamento.id}</td>
-            <td>${pagamento.usuario_nome || '-'}</td>
-            <td>R$ ${parseFloat(pagamento.valor).toFixed(2)}</td>
-            <td>${pagamento.metodo || '-'}</td>
-            <td><span class="status-badge ${statusClass}">${pagamento.status}</span></td>
-            <td>${pagamento.referencia || '-'}</td>
-            <td>${pagamento.data_criacao}</td>
+            <td>#${recarga.id}</td>
+            <td>${recarga.usuario_nome || '-'}</td>
+            <td>R$ ${parseFloat(recarga.valor).toFixed(2)}</td>
+            <td>R$ ${parseFloat(recarga.bonus || 0).toFixed(2)}</td>
+            <td>R$ ${parseFloat(recarga.valor_total).toFixed(2)}</td>
+            <td><span class="status-badge ${statusClass}">${recarga.status}</span></td>
+            <td>${recarga.referencia || '-'}</td>
+            <td>${recarga.data_criacao}</td>
             <td>
               <div class="action-buttons">
-                <button class="btn btn-outline btn-sm" title="Ver detalhes" onclick="verDetalhes(${pagamento.id})">👁</button>
+                <button class="btn btn-outline btn-sm" title="Ver detalhes" onclick="verDetalhes(${recarga.id})">👁</button>
               </div>
             </td>
           `;
@@ -306,7 +301,7 @@
         const btn = document.createElement('button');
         btn.className = `page-btn ${i === paginaAtual ? 'active' : ''}`;
         btn.textContent = i;
-        btn.addEventListener('click', () => carregarPagamentos(i));
+        btn.addEventListener('click', () => carregarRecargas(i));
         pagination.appendChild(btn);
       }
     }
@@ -314,35 +309,30 @@
     // ===== VER DETALHES =====
     async function verDetalhes(id) {
       try {
-        const response = await fetch(`${API_URL}/payments/${id}`);
+        const response = await fetch(`${API_URL}/recargas/${id}`);
         if (!response.ok) throw new Error('Erro ao carregar detalhes');
-        pagamentoSelecionado = await response.json();
-        const container = document.getElementById('detalhesPagamento');
+        recargaSelecionada = await response.json();
+        const container = document.getElementById('detalhesRecarga');
         container.innerHTML = `
-          <p><strong>ID:</strong> #${pagamentoSelecionado.id}</p>
-          <p><strong>Usuário:</strong> ${pagamentoSelecionado.usuario_nome || '-'}</p>
-          <p><strong>Valor:</strong> R$ ${parseFloat(pagamentoSelecionado.valor).toFixed(2)}</p>
-          <p><strong>Método:</strong> ${pagamentoSelecionado.metodo || '-'}</p>
-          <p><strong>Status:</strong> ${pagamentoSelecionado.status}</p>
-          <p><strong>Referência:</strong> ${pagamentoSelecionado.referencia || '-'}</p>
-          <p><strong>Data de criação:</strong> ${pagamentoSelecionado.data_criacao}</p>
-          <p><strong>Data de expiração:</strong> ${pagamentoSelecionado.data_expiracao || '-'}</p>
-          <p><strong>Data de aprovação:</strong> ${pagamentoSelecionado.data_aprovacao || '-'}</p>
-          ${pagamentoSelecionado.pix_code ? `<p><strong>PIX Copia e Cola:</strong> <span style="font-family:monospace;">${pagamentoSelecionado.pix_code}</span></p>` : ''}
+          <p><strong>ID:</strong> #${recargaSelecionada.id}</p>
+          <p><strong>Usuário:</strong> ${recargaSelecionada.usuario_nome || '-'}</p>
+          <p><strong>Valor:</strong> R$ ${parseFloat(recargaSelecionada.valor).toFixed(2)}</p>
+          <p><strong>Bônus:</strong> R$ ${parseFloat(recargaSelecionada.bonus || 0).toFixed(2)}</p>
+          <p><strong>Total creditado:</strong> R$ ${parseFloat(recargaSelecionada.valor_total).toFixed(2)}</p>
+          <p><strong>Status:</strong> ${recargaSelecionada.status}</p>
+          <p><strong>Referência:</strong> ${recargaSelecionada.referencia || '-'}</p>
+          <p><strong>Data de criação:</strong> ${recargaSelecionada.data_criacao}</p>
+          <p><strong>Data de expiração:</strong> ${recargaSelecionada.data_expiracao || '-'}</p>
+          <p><strong>Data de aprovação:</strong> ${recargaSelecionada.data_aprovacao || '-'}</p>
         `;
 
-        // Ações adicionais conforme status
+        // Ações conforme status
         const modalActions = document.getElementById('modalActions');
         modalActions.innerHTML = '';
-        if (pagamentoSelecionado.status === 'pendente') {
+        if (recargaSelecionada.status === 'pendente') {
           modalActions.innerHTML = `
-            <button class="btn btn-success" onclick="aprovarPagamento()">✅ Aprovar</button>
-            <button class="btn btn-danger" onclick="cancelarPagamento()">❌ Cancelar</button>
-            <button class="btn btn-outline" onclick="fecharModal('modalDetalhes')">Fechar</button>
-          `;
-        } else if (pagamentoSelecionado.status === 'aprovado') {
-          modalActions.innerHTML = `
-            <button class="btn btn-danger" onclick="reembolsarPagamento()">💸 Reembolsar</button>
+            <button class="btn btn-success" onclick="aprovarRecarga()">✅ Aprovar</button>
+            <button class="btn btn-danger" onclick="cancelarRecarga()">❌ Cancelar</button>
             <button class="btn btn-outline" onclick="fecharModal('modalDetalhes')">Fechar</button>
           `;
         } else {
@@ -356,59 +346,40 @@
       }
     }
 
-    // ===== APROVAR PAGAMENTO =====
-    async function aprovarPagamento() {
-      if (!pagamentoSelecionado) return;
-      if (!confirm('Deseja aprovar este pagamento?')) return;
+    // ===== APROVAR RECARGA =====
+    async function aprovarRecarga() {
+      if (!recargaSelecionada) return;
+      if (!confirm('Deseja aprovar esta recarga?')) return;
       try {
-        const response = await fetch(`${API_URL}/payments/${pagamentoSelecionado.id}/approve`, {
+        const response = await fetch(`${API_URL}/recargas/${recargaSelecionada.id}/approve`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }
         });
         if (!response.ok) throw new Error('Erro ao aprovar');
         fecharModal('modalDetalhes');
-        carregarPagamentos(paginaAtual);
-        alert('Pagamento aprovado.');
+        carregarRecargas(paginaAtual);
+        alert('Recarga aprovada.');
       } catch (error) {
-        alert('Erro ao aprovar pagamento.');
+        alert('Erro ao aprovar recarga.');
         console.error('Erro:', error);
       }
     }
 
-    // ===== CANCELAR PAGAMENTO =====
-    async function cancelarPagamento() {
-      if (!pagamentoSelecionado) return;
-      if (!confirm('Deseja cancelar este pagamento?')) return;
+    // ===== CANCELAR RECARGA =====
+    async function cancelarRecarga() {
+      if (!recargaSelecionada) return;
+      if (!confirm('Deseja cancelar esta recarga?')) return;
       try {
-        const response = await fetch(`${API_URL}/payments/${pagamentoSelecionado.id}/cancel`, {
+        const response = await fetch(`${API_URL}/recargas/${recargaSelecionada.id}/cancel`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }
         });
         if (!response.ok) throw new Error('Erro ao cancelar');
         fecharModal('modalDetalhes');
-        carregarPagamentos(paginaAtual);
-        alert('Pagamento cancelado.');
+        carregarRecargas(paginaAtual);
+        alert('Recarga cancelada.');
       } catch (error) {
-        alert('Erro ao cancelar pagamento.');
-        console.error('Erro:', error);
-      }
-    }
-
-    // ===== REEMBOLSAR PAGAMENTO =====
-    async function reembolsarPagamento() {
-      if (!pagamentoSelecionado) return;
-      if (!confirm('Deseja reembolsar este pagamento?')) return;
-      try {
-        const response = await fetch(`${API_URL}/payments/${pagamentoSelecionado.id}/refund`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
-        });
-        if (!response.ok) throw new Error('Erro ao reembolsar');
-        fecharModal('modalDetalhes');
-        carregarPagamentos(paginaAtual);
-        alert('Pagamento reembolsado.');
-      } catch (error) {
-        alert('Erro ao reembolsar pagamento.');
+        alert('Erro ao cancelar recarga.');
         console.error('Erro:', error);
       }
     }
@@ -423,7 +394,7 @@
     });
 
     // ===== INICIAR =====
-    carregarPagamentos(1);
+    carregarRecargas(1);
   </script>
 </body>
 </html>
