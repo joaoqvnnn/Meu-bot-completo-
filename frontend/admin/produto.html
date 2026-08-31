@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Produto | Painel Administrativo | Larizinha Store</title>
+  <meta name="description" content="Detalhes e edição de um produto da Larizinha Store." />
+  <style>
+    /* ===== RESET & BASE ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-dark: #0b0e14;
+      --bg-card: #121722;
+      --bg-card-hover: #1a2230;
+      --primary: #7c5cff;
+      --primary-hover: #967aff;
+      --accent: #00d4aa;
+      --text-primary: #f0f2f5;
+      --text-secondary: #aab2c5;
+      --border: #232a38;
+      --radius: 12px;
+      --shadow: 0 8px 20px rgba(0,0,0,0.3);
+      --sidebar-width: 260px;
+    }
+
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-dark); color: var(--text-primary); line-height: 1.6; display: flex; min-height: 100vh; }
+    a { text-decoration: none; color: inherit; transition: color 0.3s; }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar { width: var(--sidebar-width); background: var(--bg-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 200; transition: transform 0.3s; }
+    .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); }
+    .sidebar-logo { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+    .sidebar-logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .sidebar-nav { flex: 1; overflow-y: auto; padding: 10px 0; }
+    .sidebar-nav::-webkit-scrollbar { width: 5px; }
+    .sidebar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    .sidebar-section { padding: 10px 20px 5px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); }
+    .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 10px 20px; color: var(--text-secondary); font-weight: 500; transition: all 0.3s; border-left: 3px solid transparent; }
+    .sidebar-link:hover { background: var(--bg-card-hover); color: var(--text-primary); }
+    .sidebar-link.active { background: rgba(124,92,255,0.1); color: var(--primary); border-left-color: var(--primary); }
+    .sidebar-link .icon { width: 22px; text-align: center; font-size: 1.1rem; }
+    .sidebar-footer { padding: 15px 20px; border-top: 1px solid var(--border); }
+    .admin-info { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .admin-avatar { width: 36px; height: 36px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; }
+    .admin-details { flex: 1; }
+    .admin-name { font-weight: 600; font-size: 0.9rem; }
+    .admin-role { font-size: 0.75rem; color: var(--text-secondary); }
+    .btn-logout { width: 100%; padding: 8px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s; font-size: 0.85rem; }
+    .btn-logout:hover { border-color: #ff6b6b; color: #ff6b6b; }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content { flex: 1; margin-left: var(--sidebar-width); padding: 20px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+    .topbar h1 { font-size: 1.8rem; font-weight: 700; }
+    .topbar-actions { display: flex; gap: 10px; align-items: center; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; font-size: 0.9rem; background: transparent; color: var(--text-primary); }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 8px 16px rgba(124,92,255,0.3); }
+    .btn-outline { border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-danger { color: #ff6b6b; border: 1px solid rgba(255,107,107,0.3); }
+    .btn-danger:hover { background: rgba(255,107,107,0.1); }
+    .btn-warning { color: #ffc107; border: 1px solid rgba(255,193,7,0.3); }
+    .btn-warning:hover { background: rgba(255,193,7,0.1); }
+    .btn-success { color: var(--accent); border: 1px solid rgba(0,212,170,0.3); }
+    .btn-success:hover { background: rgba(0,212,170,0.1); }
+
+    /* ===== FORM CARD ===== */
+    .form-card { background: var(--bg-card); border-radius: var(--radius); padding: 25px; border: 1px solid var(--border); max-width: 700px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-secondary); }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 6px; color: var(--text-primary); }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124,92,255,0.2); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+    /* ===== INFO EXTRA ===== */
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+    .info-card { background: var(--bg-card); border-radius: var(--radius); padding: 15px; border: 1px solid var(--border); text-align: center; }
+    .info-card h3 { font-size: 1.5rem; color: var(--primary); }
+    .info-card p { color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ===== LOADING ===== */
+    .loading { text-align: center; padding: 40px; color: var(--text-secondary); }
+    .spinner { display: inline-block; width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .error-message { background: rgba(255,0,0,0.1); border: 1px solid rgba(255,0,0,0.3); color: #ff6b6b; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+
+    /* ===== RESPONSIVO ===== */
+    .sidebar-toggle { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); }
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; }
+      .sidebar-toggle { display: block; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="dashboard.html" class="sidebar-logo">
+        <span class="sidebar-logo-icon">🛍️</span>
+        Larizinha Store
+      </a>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Principal</div>
+      <a href="dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      <a href="usuarios.html" class="sidebar-link"><span class="icon">👥</span> Usuários</a>
+      <a href="produtos.html" class="sidebar-link active"><span class="icon">📦</span> Produtos</a>
+      <a href="categorias.html" class="sidebar-link"><span class="icon">🏷️</span> Categorias</a>
+      <a href="estoque.html" class="sidebar-link"><span class="icon">📋</span> Estoque</a>
+      <a href="pedidos.html" class="sidebar-link"><span class="icon">🛒</span> Pedidos</a>
+      <div class="sidebar-section">Financeiro</div>
+      <a href="pagamentos.html" class="sidebar-link"><span class="icon">💳</span> Pagamentos</a>
+      <a href="recargas.html" class="sidebar-link"><span class="icon">🔋</span> Recargas</a>
+      <a href="carteira.html" class="sidebar-link"><span class="icon">👛</span> Carteira</a>
+      <a href="giftcards.html" class="sidebar-link"><span class="icon">🎁</span> Gift Cards</a>
+      <a href="afiliados.html" class="sidebar-link"><span class="icon">🤝</span> Afiliados</a>
+      <a href="saques.html" class="sidebar-link"><span class="icon">💰</span> Saques</a>
+      <div class="sidebar-section">Comunicação</div>
+      <a href="rankings.html" class="sidebar-link"><span class="icon">🏆</span> Rankings</a>
+      <a href="alertas.html" class="sidebar-link"><span class="icon">🔔</span> Alertas</a>
+      <a href="mensagens.html" class="sidebar-link"><span class="icon">💬</span> Mensagens</a>
+      <a href="botoes.html" class="sidebar-link"><span class="icon">🔘</span> Botões</a>
+      <a href="menus.html" class="sidebar-link"><span class="icon">📑</span> Menus</a>
+      <a href="comandos.html" class="sidebar-link"><span class="icon">⌨️</span> Comandos</a>
+      <div class="sidebar-section">Integrações</div>
+      <a href="telegram.html" class="sidebar-link"><span class="icon">📱</span> Telegram</a>
+      <a href="whatsapp.html" class="sidebar-link"><span class="icon">💚</span> WhatsApp</a>
+      <a href="email.html" class="sidebar-link"><span class="icon">📧</span> E-mail</a>
+      <a href="mercadopago.html" class="sidebar-link"><span class="icon">💠</span> Mercado Pago</a>
+      <div class="sidebar-section">Sistema</div>
+      <a href="configuracoes.html" class="sidebar-link"><span class="icon">⚙️</span> Configurações</a>
+      <a href="seguranca.html" class="sidebar-link"><span class="icon">🔒</span> Segurança</a>
+      <a href="logs.html" class="sidebar-link"><span class="icon">📄</span> Logs</a>
+      <a href="estatisticas.html" class="sidebar-link"><span class="icon">📈</span> Estatísticas</a>
+      <a href="administradores.html" class="sidebar-link"><span class="icon">🛡️</span> Administradores</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="admin-info">
+        <div class="admin-avatar">A</div>
+        <div class="admin-details"><div class="admin-name">Admin</div><div class="admin-role">Super Admin</div></div>
+      </div>
+      <button class="btn-logout" onclick="window.location.href='../login.html'">Sair do painel</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:15px;">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        <h1>Detalhes do Produto</h1>
+      </div>
+      <div class="topbar-actions">
+        <a href="produtos.html" class="btn btn-outline">← Voltar</a>
+      </div>
+    </div>
+
+    <!-- Área de carregamento -->
+    <div id="loading" class="loading"><div class="spinner"></div><p>Carregando produto...</p></div>
+    <!-- Área de erro -->
+    <div id="errorContainer" style="display:none;"></div>
+
+    <!-- Conteúdo principal (oculto até carregar) -->
+    <div id="produtoContent" style="display:none;">
+      <!-- Informações rápidas -->
+      <div class="info-grid">
+        <div class="info-card"><h3 id="infoVendidos">0</h3><p>Vendidos</p></div>
+        <div class="info-card"><h3 id="infoEstoque">0</h3><p>Estoque atual</p></div>
+        <div class="info-card"><h3 id="infoStatus">-</h3><p>Status</p></div>
+        <div class="info-card"><h3 id="infoReceita">R$ 0,00</h3><p>Receita gerada</p></div>
+      </div>
+
+      <!-- Formulário de edição -->
+      <div class="form-card">
+        <h3 style="margin-bottom:20px;">Editar Produto</h3>
+        <input type="hidden" id="produtoId" />
+        <div class="form-group">
+          <label>Nome*</label>
+          <input type="text" id="produtoNome" placeholder="Nome do produto" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Categoria*</label>
+            <select id="produtoCategoria"><option value="">Selecione...</option></select>
+          </div>
+          <div class="form-group">
+            <label>Preço (R$)*</label>
+            <input type="number" step="0.01" id="produtoPreco" placeholder="0.00" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Estoque*</label>
+            <input type="number" id="produtoEstoque" placeholder="0" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="produtoStatus">
+              <option value="ativo">Ativo</option>
+              <option value="inativo">Inativo</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Descrição</label>
+          <textarea id="produtoDescricao" rows="4" placeholder="Descrição do produto"></textarea>
+        </div>
+        <div class="form-group">
+          <label>URL da Imagem</label>
+          <input type="text" id="produtoImagem" placeholder="https://..." />
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">
+          <button class="btn btn-success" onclick="abrirAbastecer()">📦 Abastecer</button>
+          <button class="btn btn-warning" onclick="toggleStatus()" id="btnToggleStatus">⏸️ Pausar</button>
+          <button class="btn btn-danger" onclick="excluirProduto()">🗑️ Excluir</button>
+          <button class="btn btn-primary" onclick="salvarProduto()">💾 Salvar Alterações</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL ABASTECER -->
+  <div class="modal-overlay" id="modalAbastecer" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:500; align-items:center; justify-content:center;">
+    <div class="modal" style="background:var(--bg-card); border-radius:var(--radius); padding:25px; width:90%; max-width:400px; border:1px solid var(--border);">
+      <h3>Abastecer Estoque</h3>
+      <p>Produto: <strong id="abastecerProdutoNome"></strong></p>
+      <div class="form-group" style="margin-top:15px;">
+        <label>Quantidade a adicionar</label>
+        <input type="number" id="abastecerQuantidade" min="1" placeholder="1" />
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+        <button class="btn btn-outline" onclick="fecharModal('modalAbastecer')">Cancelar</button>
+        <button class="btn btn-primary" onclick="confirmarAbastecer()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== API BASE =====
+    const API_URL = '/api/admin';
+
+    // ===== PEGAR ID DA URL =====
+    const urlParams = new URLSearchParams(window.location.search);
+    const produtoId = urlParams.get('id');
+
+    if (!produtoId) {
+      document.getElementById('loading').innerHTML = '<p style="color:#ff6b6b;">ID de produto não fornecido.</p>';
+    } else {
+      carregarCategorias();
+      carregarProduto(produtoId);
+    }
+
+    // ===== SIDEBAR TOGGLE =====
+    document.getElementById('sidebarToggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+
+    // ===== CARREGAR CATEGORIAS =====
+    async function carregarCategorias() {
+      try {
+        const response = await fetch(`${API_URL}/categories`);
+        if (!response.ok) throw new Error('Erro ao carregar categorias');
+        const categorias = await response.json();
+        const select = document.getElementById('produtoCategoria');
+        select.innerHTML = '<option value="">Selecione...</option>';
+        categorias.forEach(cat => {
+          const option = document.createElement('option');
+          option.value = cat.id;
+          option.textContent = cat.nome;
+          select.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Erro:', error);
+      }
+    }
+
+    // ===== CARREGAR PRODUTO =====
+    async function carregarProduto(id) {
+      try {
+        const response = await fetch(`${API_URL}/products/${id}`);
+        if (!response.ok) throw new Error('Produto não encontrado');
+        const produto = await response.json();
+
+        // Preencher formulário
+        document.getElementById('produtoId').value = produto.id;
+        document.getElementById('produtoNome').value = produto.nome || '';
+        document.getElementById('produtoPreco').value = produto.preco || 0;
+        document.getElementById('produtoEstoque').value = produto.estoque || 0;
+        document.getElementById('produtoStatus').value = produto.status || 'ativo';
+        document.getElementById('produtoDescricao').value = produto.descricao || '';
+        document.getElementById('produtoImagem').value = produto.imagem_url || '';
+        document.getElementById('produtoCategoria').value = produto.categoria_id || '';
+
+        // Preencher informações rápidas
+        document.getElementById('infoVendidos').textContent = produto.vendidos || 0;
+        document.getElementById('infoEstoque').textContent = produto.estoque || 0;
+        document.getElementById('infoStatus').textContent = produto.status === 'ativo' ? 'Ativo' : 'Inativo';
+        document.getElementById('infoReceita').textContent = 'R$ ' + (parseFloat(produto.receita_gerada) || 0).toFixed(2);
+
+        // Ajustar botão de status
+        document.getElementById('btnToggleStatus').textContent = produto.status === 'ativo' ? '⏸️ Pausar' : '▶️ Ativar';
+        document.getElementById('btnToggleStatus').className = produto.status === 'ativo' ? 'btn btn-warning' : 'btn btn-success';
+
+        // Mostrar conteúdo e esconder loading
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('produtoContent').style.display = 'block';
+      } catch (error) {
+        document.getElementById('loading').innerHTML = `<p style="color:#ff6b6b;">${error.message}</p>`;
+        console.error('Erro:', error);
+      }
+    }
+
+    // ===== SALVAR PRODUTO =====
+    async function salvarProduto() {
+      const id = document.getElementById('produtoId').value;
+      const nome = document.getElementById('produtoNome').value.trim();
+      const categoria_id = document.getElementById('produtoCategoria').value;
+      const preco = parseFloat(document.getElementById('produtoPreco').value);
+      const estoque = parseInt(document.getElementById('produtoEstoque').value);
+      const status = document.getElementById('produtoStatus').value;
+      const descricao = document.getElementById('produtoDescricao').value.trim();
+      const imagem_url = document.getElementById('produtoImagem').value.trim();
+
+      if (!nome || !categoria_id || isNaN(preco) || isNaN(estoque)) {
+        alert('Preencha os campos obrigatórios.');
+        return;
+      }
+
+      const payload = { nome, categoria_id, preco, estoque, status, descricao, imagem_url };
+
+      try {
+        const response = await fetch(`${API_URL}/products/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!response.ok) throw new Error('Erro ao salvar produto');
+        alert('Produto atualizado com sucesso.');
+        carregarProduto(id); // Recarregar dados
+      } catch (error) {
+        alert('Erro ao salvar produto.');
+        console.error('Erro:', error);
+      }
+    }
+
+    // ===== TOGGLE STATUS =====
+    async function toggleStatus() {
+      const id = document.getElementById('produtoId').value;
+      const statusAtual = document.getElementById('produtoStatus').value;
+      const novoStatus = statusAtual === 'ativo' ? 'inativo' : 'ativo';
+      try {
+        const response = await fetch(`${API_URL}/products/${id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: novoStatus })
+        });
+        if (!response.ok) throw new Error('Erro ao alterar status');
+        carregarProduto(id);
+      } catch (error) {
+        alert('Erro ao alterar status.');
+        console.error('Erro:', error);
+      }
+    }
+
+    // ===== EXCLUIR PRODUTO =====
+    async function excluirProduto() {
+      if (!confirm('Tem certeza que deseja excluir este produto?')) return;
+      const id = document.getElementById('produtoId').value;
+      try {
+        const response = await fetch(`${API_URL}/products/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Erro ao excluir');
+        alert('Produto excluído.');
+        window.location.href = 'produtos.html';
+      } catch (error) {
+        alert('Erro ao excluir produto.');
+        console.error('Erro:', error);
+      }
+    }
+
+    // ===== ABASTECER ESTOQUE =====
+    function abrirAbastecer() {
+      const nome = document.getElementById('produtoNome').value;
+      document.getElementById('abastecerProdutoNome').textContent = nome;
+      document.getElementById('abastecerQuantidade').value = '';
+      document.getElementById('modalAbastecer').style.display = 'flex';
+    }
+
+    async function confirmarAbastecer() {
+      const id = document.getElementById('produtoId').value;
+      const quantidade = parseInt(document.getElementById('abastecerQuantidade').value);
+      if (!quantidade || quantidade <= 0) {
+        alert('Informe uma quantidade válida.');
+        return;
+      }
+      try {
+        const response = await fetch(`${API_URL}/products/${id}/stock`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ quantidade })
+        });
+        if (!response.ok) throw new Error('Erro ao abastecer');
+        fecharModal('modalAbastecer');
+        carregarProduto(id);
+      } catch (error) {
+        alert('Erro ao abastecer estoque.');
+        console.error('Erro:', error);
+      }
+    }
+
+    function fecharModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    // Fechar modal ao clicar fora
+    document.getElementById('modalAbastecer').addEventListener('click', function(e) {
+      if (e.target === this) this.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
