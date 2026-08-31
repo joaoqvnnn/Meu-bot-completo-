@@ -7,11 +7,7 @@
   <meta name="description" content="Acesso restrito ao painel administrativo da Larizinha Store." />
   <style>
     /* ===== RESET & BASE ===== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
       --bg-dark: #0b0e14;
@@ -24,263 +20,58 @@
       --text-secondary: #aab2c5;
       --border: #232a38;
       --radius: 12px;
-      --shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      --shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-primary);
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-dark); color: var(--text-primary); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
+    a { text-decoration: none; color: var(--primary); transition: color 0.3s; }
+    a:hover { color: var(--primary-hover); }
 
-    a {
-      text-decoration: none;
-      color: var(--primary);
-      transition: color 0.3s;
-    }
-
-    a:hover {
-      color: var(--primary-hover);
-    }
-
-    .container {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
     /* ===== HEADER ===== */
-    header {
-      background: rgba(11, 14, 20, 0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .navbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 70px;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    .logo-icon {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-    }
-
-    .nav-actions {
-      display: flex;
-      gap: 12px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      border: none;
-      font-size: 0.95rem;
-      background: transparent;
-      color: var(--text-primary);
-    }
-
-    .btn-outline {
-      border: 1px solid var(--border);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(124, 92, 255, 0.3);
-    }
+    header { background: rgba(11, 14, 20, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+    .navbar { display: flex; align-items: center; justify-content: space-between; height: 70px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+    .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+    .nav-actions { display: flex; gap: 12px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; font-size: 0.95rem; background: transparent; color: var(--text-primary); }
+    .btn-outline { border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
 
     /* ===== ADMIN LOGIN SECTION ===== */
-    .admin-login-wrapper {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 20px;
-    }
+    .admin-login-wrapper { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+    .admin-login-card { background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border); padding: 40px; width: 100%; max-width: 440px; box-shadow: var(--shadow); }
+    .admin-login-card h2 { text-align: center; margin-bottom: 8px; font-size: 1.8rem; font-weight: 700; }
+    .admin-login-subtitle { text-align: center; color: var(--text-secondary); margin-bottom: 30px; font-size: 0.95rem; }
+    .restricted-badge { display: inline-block; background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); color: #ffc107; font-size: 0.8rem; padding: 4px 12px; border-radius: 50px; margin-bottom: 15px; text-align: center; width: fit-content; margin-left: auto; margin-right: auto; }
 
-    .admin-login-card {
-      background: var(--bg-card);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      padding: 40px;
-      width: 100%;
-      max-width: 440px;
-      box-shadow: var(--shadow);
-    }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-secondary); }
+    .form-group input { width: 100%; padding: 12px 16px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 1rem; transition: border-color 0.3s, box-shadow 0.3s; }
+    .form-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.2); }
+    .form-group input::placeholder { color: #556; }
 
-    .admin-login-card h2 {
-      text-align: center;
-      margin-bottom: 8px;
-      font-size: 1.8rem;
-      font-weight: 700;
-    }
+    .btn-admin-login { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: background 0.3s, transform 0.2s; }
+    .btn-admin-login:hover { background: var(--primary-hover); transform: translateY(-2px); }
+    .btn-admin-login:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    .admin-login-subtitle {
-      text-align: center;
-      color: var(--text-secondary);
-      margin-bottom: 30px;
-      font-size: 0.95rem;
-    }
-
-    .restricted-badge {
-      display: inline-block;
-      background: rgba(255, 193, 7, 0.1);
-      border: 1px solid rgba(255, 193, 7, 0.3);
-      color: #ffc107;
-      font-size: 0.8rem;
-      padding: 4px 12px;
-      border-radius: 50px;
-      margin-bottom: 15px;
-      text-align: center;
-      width: fit-content;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: var(--text-secondary);
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 12px 16px;
-      background: var(--bg-dark);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text-primary);
-      font-size: 1rem;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-
-    .form-group input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.2);
-    }
-
-    .form-group input::placeholder {
-      color: #556;
-    }
-
-    .btn-admin-login {
-      width: 100%;
-      padding: 14px;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    .btn-admin-login:hover {
-      background: var(--primary-hover);
-      transform: translateY(-2px);
-    }
-
-    .btn-admin-login:active {
-      transform: translateY(0);
-    }
-
-    .back-link {
-      text-align: center;
-      margin-top: 20px;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
+    .back-link { text-align: center; margin-top: 20px; color: var(--text-secondary); font-size: 0.9rem; }
 
     /* ===== MENSAGENS ===== */
-    .error-message {
-      background: rgba(255, 0, 0, 0.1);
-      border: 1px solid rgba(255, 0, 0, 0.3);
-      color: #ff6b6b;
-      padding: 10px;
-      border-radius: 6px;
-      margin-bottom: 20px;
-      font-size: 0.9rem;
-      display: none;
-    }
-
-    .error-message.show {
-      display: block;
-    }
+    .error-message { background: rgba(255, 0, 0, 0.1); border: 1px solid rgba(255, 0, 0, 0.3); color: #ff6b6b; padding: 10px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9rem; display: none; }
+    .error-message.show { display: block; }
+    .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ===== FOOTER ===== */
-    footer {
-      background: var(--bg-card);
-      border-top: 1px solid var(--border);
-      padding: 20px 0;
-      text-align: center;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
+    footer { background: var(--bg-card); border-top: 1px solid var(--border); padding: 20px 0; text-align: center; color: var(--text-secondary); font-size: 0.9rem; }
+    footer a { margin: 0 10px; }
 
-    footer a {
-      margin: 0 10px;
-    }
-
-    /* ===== RESPONSIVE ===== */
     @media (max-width: 480px) {
-      .admin-login-card {
-        padding: 25px;
-      }
-      .navbar {
-        height: 60px;
-      }
-      .logo {
-        font-size: 1.2rem;
-      }
+      .admin-login-card { padding: 25px; }
+      .navbar { height: 60px; }
+      .logo { font-size: 1.2rem; }
     }
   </style>
 </head>
@@ -320,7 +111,7 @@
           <input type="password" id="password" name="password" placeholder="••••••••" required />
         </div>
 
-        <button type="submit" class="btn-admin-login" id="adminLoginButton">Acessar painel</button>
+        <button type="submit" class="btn-admin-login" id="loginButton">Acessar painel</button>
       </form>
 
       <p class="back-link">
@@ -342,45 +133,63 @@
   </footer>
 
   <script>
-    // ===== SIMULAÇÃO DE LOGIN ADMIN (será substituído pela API real) =====
-    document.getElementById('adminLoginForm').addEventListener('submit', function (e) {
+    document.getElementById('adminLoginForm').addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
       const errorMessage = document.getElementById('errorMessage');
+      const loginButton = document.getElementById('loginButton');
 
       // Resetar mensagem
       errorMessage.classList.remove('show');
 
-      // Validação simples
+      // Validação básica
       if (!email || !password) {
         showError('Preencha todos os campos.');
         return;
       }
 
-      // Em produção, chamada à API:
-      // fetch('/api/admin/login', { method: 'POST', ... })
-      //   .then(...)
+      // Desabilitar botão e mostrar loading
+      loginButton.disabled = true;
+      loginButton.innerHTML = '<span class="loading-spinner"></span> Autenticando...';
 
-      // Simulação: credenciais admin demo
-      if (email === 'admin@larizinha.com' && password === 'admin123') {
-        showError('');
-        // Redireciona para o dashboard
+      try {
+        const response = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Falha na autenticação.');
+        }
+
+        // Armazenar token de autenticação
+        if (data.token) {
+          localStorage.setItem('admin_token', data.token);
+          // Opcional: armazenar dados do admin
+          localStorage.setItem('admin_data', JSON.stringify(data.admin));
+        }
+
+        // Redirecionar para o dashboard
         window.location.href = 'dashboard.html';
-      } else {
-        showError('Credenciais inválidas. Use admin@larizinha.com / admin123 (demo).');
+      } catch (error) {
+        showError(error.message || 'Erro ao conectar ao servidor. Tente novamente.');
+        console.error('Erro de login:', error);
+      } finally {
+        // Restaurar botão
+        loginButton.disabled = false;
+        loginButton.innerHTML = 'Acessar painel';
       }
     });
 
     function showError(message) {
       const errorElement = document.getElementById('errorMessage');
-      if (message) {
-        errorElement.textContent = message;
-        errorElement.classList.add('show');
-      } else {
-        errorElement.classList.remove('show');
-      }
+      errorElement.textContent = message;
+      errorElement.classList.add('show');
     }
   </script>
 
