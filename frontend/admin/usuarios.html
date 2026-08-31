@@ -7,11 +7,7 @@
   <meta name="description" content="Gerenciamento de usuários da Larizinha Store." />
   <style>
     /* ===== RESET & BASE ===== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
       --bg-dark: #0b0e14;
@@ -24,460 +20,101 @@
       --text-secondary: #aab2c5;
       --border: #232a38;
       --radius: 12px;
-      --shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      --shadow: 0 8px 20px rgba(0,0,0,0.3);
       --sidebar-width: 260px;
     }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-primary);
-      line-height: 1.6;
-      display: flex;
-      min-height: 100vh;
-    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-dark); color: var(--text-primary); line-height: 1.6; display: flex; min-height: 100vh; }
+    a { text-decoration: none; color: inherit; transition: color 0.3s; }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-      transition: color 0.3s;
-    }
-
-    /* ===== SIDEBAR (mesma do dashboard) ===== */
-    .sidebar {
-      width: var(--sidebar-width);
-      background: var(--bg-card);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      z-index: 200;
-      transition: transform 0.3s ease;
-    }
-
-    .sidebar-header {
-      padding: 20px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .sidebar-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    .sidebar-logo-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-    }
-
-    .sidebar-nav {
-      flex: 1;
-      overflow-y: auto;
-      padding: 10px 0;
-    }
-
-    .sidebar-nav::-webkit-scrollbar {
-      width: 5px;
-    }
-
-    .sidebar-nav::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 10px;
-    }
-
-    .sidebar-section {
-      padding: 10px 20px 5px;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text-secondary);
-    }
-
-    .sidebar-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 20px;
-      color: var(--text-secondary);
-      font-weight: 500;
-      transition: all 0.3s;
-      border-left: 3px solid transparent;
-    }
-
-    .sidebar-link:hover {
-      background: var(--bg-card-hover);
-      color: var(--text-primary);
-    }
-
-    .sidebar-link.active {
-      background: rgba(124, 92, 255, 0.1);
-      color: var(--primary);
-      border-left-color: var(--primary);
-    }
-
-    .sidebar-link .icon {
-      width: 22px;
-      text-align: center;
-      font-size: 1.1rem;
-    }
-
-    .sidebar-footer {
-      padding: 15px 20px;
-      border-top: 1px solid var(--border);
-    }
-
-    .admin-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .admin-avatar {
-      width: 36px;
-      height: 36px;
-      background: var(--primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      color: white;
-    }
-
-    .admin-details {
-      flex: 1;
-    }
-
-    .admin-name {
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    .admin-role {
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-    }
-
-    .btn-logout {
-      width: 100%;
-      padding: 8px;
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.3s;
-      font-size: 0.85rem;
-    }
-
-    .btn-logout:hover {
-      border-color: #ff6b6b;
-      color: #ff6b6b;
-    }
+    /* ===== SIDEBAR ===== */
+    .sidebar { width: var(--sidebar-width); background: var(--bg-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 200; transition: transform 0.3s; }
+    .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); }
+    .sidebar-logo { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+    .sidebar-logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .sidebar-nav { flex: 1; overflow-y: auto; padding: 10px 0; }
+    .sidebar-nav::-webkit-scrollbar { width: 5px; }
+    .sidebar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    .sidebar-section { padding: 10px 20px 5px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); }
+    .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 10px 20px; color: var(--text-secondary); font-weight: 500; transition: all 0.3s; border-left: 3px solid transparent; }
+    .sidebar-link:hover { background: var(--bg-card-hover); color: var(--text-primary); }
+    .sidebar-link.active { background: rgba(124,92,255,0.1); color: var(--primary); border-left-color: var(--primary); }
+    .sidebar-link .icon { width: 22px; text-align: center; font-size: 1.1rem; }
+    .sidebar-footer { padding: 15px 20px; border-top: 1px solid var(--border); }
+    .admin-info { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .admin-avatar { width: 36px; height: 36px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; }
+    .admin-details { flex: 1; }
+    .admin-name { font-weight: 600; font-size: 0.9rem; }
+    .admin-role { font-size: 0.75rem; color: var(--text-secondary); }
+    .btn-logout { width: 100%; padding: 8px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s; font-size: 0.85rem; }
+    .btn-logout:hover { border-color: #ff6b6b; color: #ff6b6b; }
 
     /* ===== MAIN CONTENT ===== */
-    .main-content {
-      flex: 1;
-      margin-left: var(--sidebar-width);
-      padding: 20px;
-    }
+    .main-content { flex: 1; margin-left: var(--sidebar-width); padding: 20px; }
 
     /* ===== TOPBAR ===== */
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 30px;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+    .topbar h1 { font-size: 1.8rem; font-weight: 700; }
+    .topbar-actions { display: flex; gap: 10px; align-items: center; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; font-size: 0.9rem; background: transparent; color: var(--text-primary); }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 8px 16px rgba(124,92,255,0.3); }
+    .btn-outline { border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-sm { padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; }
+    .btn-danger { color: #ff6b6b; border: 1px solid rgba(255,107,107,0.3); }
+    .btn-danger:hover { background: rgba(255,107,107,0.1); }
 
-    .topbar h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-    }
+    /* ===== FILTROS ===== */
+    .filters { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+    .search-input { flex: 1; min-width: 200px; padding: 10px 15px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 0.9rem; transition: border-color 0.3s, box-shadow 0.3s; }
+    .search-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124,92,255,0.2); }
+    select { padding: 10px 15px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 0.9rem; cursor: pointer; }
 
-    .topbar-actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      border: none;
-      font-size: 0.9rem;
-      background: transparent;
-      color: var(--text-primary);
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(124, 92, 255, 0.3);
-    }
-
-    .btn-outline {
-      border: 1px solid var(--border);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    .btn-sm {
-      padding: 6px 12px;
-      font-size: 0.8rem;
-      border-radius: 6px;
-    }
-
-    .btn-danger {
-      color: #ff6b6b;
-      border: 1px solid rgba(255, 107, 107, 0.3);
-    }
-
-    .btn-danger:hover {
-      background: rgba(255, 107, 107, 0.1);
-    }
-
-    /* ===== FILTERS ===== */
-    .filters {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .search-input {
-      flex: 1;
-      min-width: 200px;
-      padding: 10px 15px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text-primary);
-      font-size: 0.9rem;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-
-    .search-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.2);
-    }
-
-    select {
-      padding: 10px 15px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text-primary);
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-
-    /* ===== TABLE ===== */
-    .table-container {
-      background: var(--bg-card);
-      border-radius: var(--radius);
-      padding: 20px;
-      border: 1px solid var(--border);
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 800px;
-    }
-
-    th {
-      text-align: left;
-      padding: 12px;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-secondary);
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-    }
-
-    td {
-      padding: 12px;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.9rem;
-      vertical-align: middle;
-    }
-
-    tr:hover td {
-      background: var(--bg-card-hover);
-    }
-
-    .status-badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 50px;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-
-    .status-active {
-      background: rgba(0, 212, 170, 0.15);
-      color: var(--accent);
-    }
-
-    .status-blocked {
-      background: rgba(255, 107, 107, 0.15);
-      color: #ff6b6b;
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 5px;
-    }
+    /* ===== TABELA ===== */
+    .table-container { background: var(--bg-card); border-radius: var(--radius); padding: 20px; border: 1px solid var(--border); overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 800px; }
+    th { text-align: left; padding: 12px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.9rem; vertical-align: middle; }
+    tr:hover td { background: var(--bg-card-hover); }
+    .status-badge { display: inline-block; padding: 4px 10px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; }
+    .status-active { background: rgba(0,212,170,0.15); color: var(--accent); }
+    .status-blocked { background: rgba(255,107,107,0.15); color: #ff6b6b; }
+    .action-buttons { display: flex; gap: 5px; }
 
     /* ===== MODAL ===== */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 500;
-      align-items: center;
-      justify-content: center;
-    }
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 500; align-items: center; justify-content: center; }
+    .modal-overlay.show { display: flex; }
+    .modal { background: var(--bg-card); border-radius: var(--radius); padding: 25px; width: 90%; max-width: 500px; border: 1px solid var(--border); }
+    .modal h3 { margin-bottom: 15px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; color: var(--text-secondary); font-size: 0.9rem; }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 6px; color: var(--text-primary); }
+    .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; }
 
-    .modal-overlay.show {
-      display: flex;
-    }
+    /* ===== LOADING ===== */
+    .loading { text-align: center; padding: 40px; color: var(--text-secondary); }
+    .spinner { display: inline-block; width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    .modal {
-      background: var(--bg-card);
-      border-radius: var(--radius);
-      padding: 25px;
-      width: 90%;
-      max-width: 500px;
-      border: 1px solid var(--border);
-    }
+    /* ===== PAGINAÇÃO ===== */
+    .pagination { display: flex; gap: 5px; margin-top: 20px; justify-content: center; }
+    .page-btn { padding: 6px 12px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; }
+    .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-    .modal h3 {
-      margin-bottom: 15px;
-    }
-
-    .modal .form-group {
-      margin-bottom: 15px;
-    }
-
-    .modal .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
-
-    .modal .form-group input,
-    .modal .form-group textarea {
-      width: 100%;
-      padding: 10px;
-      background: var(--bg-dark);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text-primary);
-    }
-
-    .modal-buttons {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-    }
-
-    /* ===== PAGINATION ===== */
-    .pagination {
-      display: flex;
-      gap: 5px;
-      margin-top: 20px;
-      justify-content: center;
-    }
-
-    .page-btn {
-      padding: 6px 12px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text-secondary);
-      cursor: pointer;
-    }
-
-    .page-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-
-    /* ===== SIDEBAR TOGGLE (MOBILE) ===== */
-    .sidebar-toggle {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--text-primary);
-    }
-
-    /* ===== RESPONSIVE ===== */
+    /* ===== RESPONSIVO ===== */
+    .sidebar-toggle { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); }
     @media (max-width: 768px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-
-      .sidebar.open {
-        transform: translateX(0);
-      }
-
-      .main-content {
-        margin-left: 0;
-      }
-
-      .sidebar-toggle {
-        display: block;
-      }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; }
+      .sidebar-toggle { display: block; }
     }
   </style>
 </head>
 <body>
 
-  <!-- SIDEBAR (idêntica ao dashboard) -->
+  <!-- SIDEBAR (idêntica em todas as páginas) -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <a href="dashboard.html" class="sidebar-logo">
@@ -485,107 +122,44 @@
         Larizinha Store
       </a>
     </div>
-
     <nav class="sidebar-nav">
       <div class="sidebar-section">Principal</div>
-      <a href="dashboard.html" class="sidebar-link">
-        <span class="icon">📊</span> Dashboard
-      </a>
-      <a href="usuarios.html" class="sidebar-link active">
-        <span class="icon">👥</span> Usuários
-      </a>
-      <a href="produtos.html" class="sidebar-link">
-        <span class="icon">📦</span> Produtos
-      </a>
-      <a href="categorias.html" class="sidebar-link">
-        <span class="icon">🏷️</span> Categorias
-      </a>
-      <a href="estoque.html" class="sidebar-link">
-        <span class="icon">📋</span> Estoque
-      </a>
-      <a href="pedidos.html" class="sidebar-link">
-        <span class="icon">🛒</span> Pedidos
-      </a>
-
+      <a href="dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      <a href="usuarios.html" class="sidebar-link active"><span class="icon">👥</span> Usuários</a>
+      <a href="produtos.html" class="sidebar-link"><span class="icon">📦</span> Produtos</a>
+      <a href="categorias.html" class="sidebar-link"><span class="icon">🏷️</span> Categorias</a>
+      <a href="estoque.html" class="sidebar-link"><span class="icon">📋</span> Estoque</a>
+      <a href="pedidos.html" class="sidebar-link"><span class="icon">🛒</span> Pedidos</a>
       <div class="sidebar-section">Financeiro</div>
-      <a href="pagamentos.html" class="sidebar-link">
-        <span class="icon">💳</span> Pagamentos
-      </a>
-      <a href="recargas.html" class="sidebar-link">
-        <span class="icon">🔋</span> Recargas
-      </a>
-      <a href="carteira.html" class="sidebar-link">
-        <span class="icon">👛</span> Carteira
-      </a>
-      <a href="giftcards.html" class="sidebar-link">
-        <span class="icon">🎁</span> Gift Cards
-      </a>
-      <a href="afiliados.html" class="sidebar-link">
-        <span class="icon">🤝</span> Afiliados
-      </a>
-      <a href="saques.html" class="sidebar-link">
-        <span class="icon">💰</span> Saques
-      </a>
-
+      <a href="pagamentos.html" class="sidebar-link"><span class="icon">💳</span> Pagamentos</a>
+      <a href="recargas.html" class="sidebar-link"><span class="icon">🔋</span> Recargas</a>
+      <a href="carteira.html" class="sidebar-link"><span class="icon">👛</span> Carteira</a>
+      <a href="giftcards.html" class="sidebar-link"><span class="icon">🎁</span> Gift Cards</a>
+      <a href="afiliados.html" class="sidebar-link"><span class="icon">🤝</span> Afiliados</a>
+      <a href="saques.html" class="sidebar-link"><span class="icon">💰</span> Saques</a>
       <div class="sidebar-section">Comunicação</div>
-      <a href="rankings.html" class="sidebar-link">
-        <span class="icon">🏆</span> Rankings
-      </a>
-      <a href="alertas.html" class="sidebar-link">
-        <span class="icon">🔔</span> Alertas
-      </a>
-      <a href="mensagens.html" class="sidebar-link">
-        <span class="icon">💬</span> Mensagens
-      </a>
-      <a href="botoes.html" class="sidebar-link">
-        <span class="icon">🔘</span> Botões
-      </a>
-      <a href="menus.html" class="sidebar-link">
-        <span class="icon">📑</span> Menus
-      </a>
-      <a href="comandos.html" class="sidebar-link">
-        <span class="icon">⌨️</span> Comandos
-      </a>
-
+      <a href="rankings.html" class="sidebar-link"><span class="icon">🏆</span> Rankings</a>
+      <a href="alertas.html" class="sidebar-link"><span class="icon">🔔</span> Alertas</a>
+      <a href="mensagens.html" class="sidebar-link"><span class="icon">💬</span> Mensagens</a>
+      <a href="botoes.html" class="sidebar-link"><span class="icon">🔘</span> Botões</a>
+      <a href="menus.html" class="sidebar-link"><span class="icon">📑</span> Menus</a>
+      <a href="comandos.html" class="sidebar-link"><span class="icon">⌨️</span> Comandos</a>
       <div class="sidebar-section">Integrações</div>
-      <a href="telegram.html" class="sidebar-link">
-        <span class="icon">📱</span> Telegram
-      </a>
-      <a href="whatsapp.html" class="sidebar-link">
-        <span class="icon">💚</span> WhatsApp
-      </a>
-      <a href="email.html" class="sidebar-link">
-        <span class="icon">📧</span> E-mail
-      </a>
-      <a href="mercadopago.html" class="sidebar-link">
-        <span class="icon">💠</span> Mercado Pago
-      </a>
-
+      <a href="telegram.html" class="sidebar-link"><span class="icon">📱</span> Telegram</a>
+      <a href="whatsapp.html" class="sidebar-link"><span class="icon">💚</span> WhatsApp</a>
+      <a href="email.html" class="sidebar-link"><span class="icon">📧</span> E-mail</a>
+      <a href="mercadopago.html" class="sidebar-link"><span class="icon">💠</span> Mercado Pago</a>
       <div class="sidebar-section">Sistema</div>
-      <a href="configuracoes.html" class="sidebar-link">
-        <span class="icon">⚙️</span> Configurações
-      </a>
-      <a href="seguranca.html" class="sidebar-link">
-        <span class="icon">🔒</span> Segurança
-      </a>
-      <a href="logs.html" class="sidebar-link">
-        <span class="icon">📄</span> Logs
-      </a>
-      <a href="estatisticas.html" class="sidebar-link">
-        <span class="icon">📈</span> Estatísticas
-      </a>
-      <a href="administradores.html" class="sidebar-link">
-        <span class="icon">🛡️</span> Administradores
-      </a>
+      <a href="configuracoes.html" class="sidebar-link"><span class="icon">⚙️</span> Configurações</a>
+      <a href="seguranca.html" class="sidebar-link"><span class="icon">🔒</span> Segurança</a>
+      <a href="logs.html" class="sidebar-link"><span class="icon">📄</span> Logs</a>
+      <a href="estatisticas.html" class="sidebar-link"><span class="icon">📈</span> Estatísticas</a>
+      <a href="administradores.html" class="sidebar-link"><span class="icon">🛡️</span> Administradores</a>
     </nav>
-
     <div class="sidebar-footer">
       <div class="admin-info">
         <div class="admin-avatar">A</div>
-        <div class="admin-details">
-          <div class="admin-name">Admin</div>
-          <div class="admin-role">Super Admin</div>
-        </div>
+        <div class="admin-details"><div class="admin-name">Admin</div><div class="admin-role">Super Admin</div></div>
       </div>
       <button class="btn-logout" onclick="window.location.href='../login.html'">Sair do painel</button>
     </div>
@@ -593,14 +167,13 @@
 
   <!-- MAIN CONTENT -->
   <main class="main-content">
-    <!-- Topbar -->
     <div class="topbar">
-      <div style="display: flex; align-items: center; gap: 15px;">
+      <div style="display:flex;align-items:center;gap:15px;">
         <button class="sidebar-toggle" id="sidebarToggle">☰</button>
         <h1>Usuários</h1>
       </div>
       <div class="topbar-actions">
-        <button class="btn btn-primary" onclick="abrirModal('modalNovoUsuario')">+ Novo Usuário</button>
+        <!-- Em uma implementação real, pode-se adicionar botão de exportar, etc. -->
       </div>
     </div>
 
@@ -620,9 +193,10 @@
       <button class="btn btn-outline" onclick="filtrarUsuarios()">Filtrar</button>
     </div>
 
-    <!-- Tabela de Usuários -->
+    <!-- Tabela -->
     <div class="table-container">
-      <table id="usuariosTable">
+      <div id="loading" class="loading"><div class="spinner"></div><p>Carregando usuários...</p></div>
+      <table id="usuariosTable" style="display:none;">
         <thead>
           <tr>
             <th>ID</th>
@@ -639,9 +213,7 @@
             <th>Ações</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Dados serão preenchidos via JS -->
-        </tbody>
+        <tbody id="usuariosBody"></tbody>
       </table>
       <div class="pagination" id="pagination"></div>
     </div>
@@ -693,244 +265,222 @@
     </div>
   </div>
 
-  <!-- Modal Novo Usuário -->
-  <div class="modal-overlay" id="modalNovoUsuario">
-    <div class="modal">
-      <h3>Novo Usuário</h3>
-      <div class="form-group">
-        <label>Nome</label>
-        <input type="text" id="novoNome" placeholder="Nome completo" />
-      </div>
-      <div class="form-group">
-        <label>E-mail</label>
-        <input type="email" id="novoEmail" placeholder="E-mail" />
-      </div>
-      <div class="form-group">
-        <label>Telegram ID (opcional)</label>
-        <input type="number" id="novoTelegramId" placeholder="ID do Telegram" />
-      </div>
-      <div class="modal-buttons">
-        <button class="btn btn-outline" onclick="fecharModal('modalNovoUsuario')">Cancelar</button>
-        <button class="btn btn-primary" onclick="confirmarNovoUsuario()">Criar</button>
-      </div>
-    </div>
-  </div>
-
   <script>
-    // ===== DADOS DE EXEMPLO =====
-    let usuarios = [
-      { id: 1, nome: 'João Silva', username: '@joao_silva', telegramId: 123456789, email: 'joao@email.com', whatsapp: '(11) 99999-1111', saldo: 45.50, compras: 12, afiliado: true, status: 'ativo', data: '2025-01-15' },
-      { id: 2, nome: 'Maria Clara', username: '@maria_clara', telegramId: 987654321, email: 'maria@email.com', whatsapp: '(11) 98888-2222', saldo: 120.00, compras: 8, afiliado: false, status: 'ativo', data: '2025-01-20' },
-      { id: 3, nome: 'Pedro Henrique', username: '@pedro_henrique', telegramId: 555666777, email: 'pedro@email.com', whatsapp: '(21) 97777-3333', saldo: 0, compras: 3, afiliado: true, status: 'bloqueado', data: '2025-02-01' },
-      { id: 4, nome: 'Ana Beatriz', username: '@ana_beatriz', telegramId: 444333222, email: 'ana@email.com', whatsapp: '(31) 96666-4444', saldo: 250.75, compras: 20, afiliado: true, status: 'ativo', data: '2024-12-10' },
-      { id: 5, nome: 'Lucas Martins', username: '@lucas_martins', telegramId: 111222333, email: 'lucas@email.com', whatsapp: '(41) 95555-5555', saldo: 8.00, compras: 5, afiliado: false, status: 'ativo', data: '2025-01-05' },
-      { id: 6, nome: 'Carla Souza', username: '@carla_souza', telegramId: 777888999, email: 'carla@email.com', whatsapp: '(51) 94444-6666', saldo: 300.00, compras: 30, afiliado: true, status: 'ativo', data: '2024-11-20' },
-      { id: 7, nome: 'Fernando Costa', username: '@fernando_costa', telegramId: 222333444, email: 'fernando@email.com', whatsapp: '(61) 93333-7777', saldo: 0, compras: 1, afiliado: false, status: 'bloqueado', data: '2025-02-15' },
-      { id: 8, nome: 'Juliana Lima', username: '@juliana_lima', telegramId: 666777888, email: 'juliana@email.com', whatsapp: '(71) 92222-8888', saldo: 75.00, compras: 15, afiliado: true, status: 'ativo', data: '2025-01-25' },
-      { id: 9, nome: 'Rafael Almeida', username: '@rafael_almeida', telegramId: 333444555, email: 'rafael@email.com', whatsapp: '(81) 91111-9999', saldo: 5.00, compras: 2, afiliado: false, status: 'ativo', data: '2025-03-01' },
-      { id: 10, nome: 'Beatriz Rocha', username: '@beatriz_rocha', telegramId: 999888777, email: 'beatriz@email.com', whatsapp: '(91) 90000-0000', saldo: 150.00, compras: 18, afiliado: true, status: 'ativo', data: '2025-02-10' }
-    ];
+    // ===== API BASE =====
+    const API_URL = '/api/admin';
 
-    let usuarioAtual = null; // para ações de modal
-    const itensPorPagina = 5;
+    // ===== ESTADO =====
     let paginaAtual = 1;
+    let totalPaginas = 1;
+    let usuarioSelecionado = null; // para ações de modal
 
-    // ===== FUNÇÕES DE RENDERIZAÇÃO =====
-    function renderizarTabela() {
-      const tbody = document.querySelector('#usuariosTable tbody');
-      tbody.innerHTML = '';
-      const inicio = (paginaAtual - 1) * itensPorPagina;
-      const fim = inicio + itensPorPagina;
-      const usuariosPagina = usuarios.slice(inicio, fim);
+    // ===== SIDEBAR TOGGLE =====
+    document.getElementById('sidebarToggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
 
-      usuariosPagina.forEach(user => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${user.id}</td>
-          <td>${user.nome}</td>
-          <td>${user.username}</td>
-          <td>${user.telegramId || '-'}</td>
-          <td>${user.email}</td>
-          <td>${user.whatsapp || '-'}</td>
-          <td>R$ ${user.saldo.toFixed(2)}</td>
-          <td>${user.compras}</td>
-          <td>${user.afiliado ? '✅' : '❌'}</td>
-          <td><span class="status-badge ${user.status === 'ativo' ? 'status-active' : 'status-blocked'}">${user.status}</span></td>
-          <td>${user.data}</td>
-          <td>
-            <div class="action-buttons">
-              <button class="btn btn-outline btn-sm" onclick="verUsuario(${user.id})">👁</button>
-              <button class="btn btn-outline btn-sm" onclick="abrirAjusteSaldo(${user.id})">💰</button>
-              <button class="btn ${user.status === 'ativo' ? 'btn-danger' : 'btn-outline'} btn-sm" onclick="toggleStatus(${user.id})">${user.status === 'ativo' ? '🚫' : '🔓'}</button>
-              <button class="btn btn-outline btn-sm" onclick="abrirEnvioMensagem(${user.id})">📨</button>
-            </div>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
+    // ===== CARREGAR USUÁRIOS =====
+    async function carregarUsuarios(pagina = 1) {
+      const loading = document.getElementById('loading');
+      const table = document.getElementById('usuariosTable');
+      const tbody = document.getElementById('usuariosBody');
+      loading.style.display = 'block';
+      table.style.display = 'none';
 
-      renderizarPaginacao();
+      const termo = document.getElementById('searchInput').value.trim();
+      const status = document.getElementById('statusFilter').value;
+      const afiliado = document.getElementById('afiliadoFilter').value;
+
+      let url = `${API_URL}/users?page=${pagina}&limit=10`;
+      if (termo) url += `&search=${encodeURIComponent(termo)}`;
+      if (status) url += `&status=${status}`;
+      if (afiliado) url += `&afiliado=${afiliado}`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Erro ao carregar usuários');
+        const data = await response.json();
+        paginaAtual = data.page || pagina;
+        totalPaginas = data.totalPages || 1;
+        tbody.innerHTML = '';
+
+        data.users.forEach(user => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${user.id}</td>
+            <td>${user.nome}</td>
+            <td>${user.username || '-'}</td>
+            <td>${user.telegram_id || '-'}</td>
+            <td>${user.email || '-'}</td>
+            <td>${user.whatsapp || '-'}</td>
+            <td>R$ ${parseFloat(user.saldo).toFixed(2)}</td>
+            <td>${user.compras || 0}</td>
+            <td>${user.afiliado ? '✅' : '❌'}</td>
+            <td><span class="status-badge ${user.status === 'ativo' ? 'status-active' : 'status-blocked'}">${user.status}</span></td>
+            <td>${user.data_cadastro || '-'}</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-outline btn-sm" title="Ver detalhes" onclick="verUsuario(${user.id})">👁</button>
+                <button class="btn btn-outline btn-sm" title="Ajustar saldo" onclick="abrirAjusteSaldo(${user.id})">💰</button>
+                <button class="btn ${user.status === 'ativo' ? 'btn-danger' : 'btn-outline'} btn-sm" title="${user.status === 'ativo' ? 'Bloquear' : 'Desbloquear'}" onclick="toggleStatus(${user.id}, '${user.status}')">${user.status === 'ativo' ? '🚫' : '🔓'}</button>
+                <button class="btn btn-outline btn-sm" title="Enviar mensagem" onclick="abrirEnvioMensagem(${user.id})">📨</button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        table.style.display = 'table';
+        loading.style.display = 'none';
+        renderizarPaginacao();
+      } catch (error) {
+        loading.innerHTML = `<p style="color:#ff6b6b;">${error.message}</p>`;
+        console.error('Erro:', error);
+      }
     }
 
     function renderizarPaginacao() {
-      const totalPaginas = Math.ceil(usuarios.length / itensPorPagina);
       const pagination = document.getElementById('pagination');
       pagination.innerHTML = '';
       for (let i = 1; i <= totalPaginas; i++) {
         const btn = document.createElement('button');
         btn.className = `page-btn ${i === paginaAtual ? 'active' : ''}`;
         btn.textContent = i;
-        btn.addEventListener('click', () => {
-          paginaAtual = i;
-          renderizarTabela();
-        });
+        btn.addEventListener('click', () => carregarUsuarios(i));
         pagination.appendChild(btn);
       }
     }
 
+    // ===== FILTRO =====
+    function filtrarUsuarios() {
+      carregarUsuarios(1);
+    }
+
     // ===== AÇÕES =====
-    function verUsuario(id) {
-      usuarioAtual = usuarios.find(u => u.id === id);
-      const detalhes = document.getElementById('detalhesUsuario');
-      detalhes.innerHTML = `
-        <p><strong>ID:</strong> ${usuarioAtual.id}</p>
-        <p><strong>Nome:</strong> ${usuarioAtual.nome}</p>
-        <p><strong>Username:</strong> ${usuarioAtual.username}</p>
-        <p><strong>Telegram ID:</strong> ${usuarioAtual.telegramId || '-'}</p>
-        <p><strong>E-mail:</strong> ${usuarioAtual.email}</p>
-        <p><strong>WhatsApp:</strong> ${usuarioAtual.whatsapp || '-'}</p>
-        <p><strong>Saldo:</strong> R$ ${usuarioAtual.saldo.toFixed(2)}</p>
-        <p><strong>Compras:</strong> ${usuarioAtual.compras}</p>
-        <p><strong>Afiliado:</strong> ${usuarioAtual.afiliado ? 'Sim' : 'Não'}</p>
-        <p><strong>Status:</strong> ${usuarioAtual.status}</p>
-        <p><strong>Data de cadastro:</strong> ${usuarioAtual.data}</p>
-      `;
-      abrirModal('modalVerUsuario');
+    async function verUsuario(id) {
+      try {
+        const response = await fetch(`${API_URL}/users/${id}`);
+        if (!response.ok) throw new Error('Erro ao carregar usuário');
+        usuarioSelecionado = await response.json();
+        const detalhes = document.getElementById('detalhesUsuario');
+        detalhes.innerHTML = `
+          <p><strong>ID:</strong> ${usuarioSelecionado.id}</p>
+          <p><strong>Nome:</strong> ${usuarioSelecionado.nome}</p>
+          <p><strong>Username:</strong> ${usuarioSelecionado.username || '-'}</p>
+          <p><strong>Telegram ID:</strong> ${usuarioSelecionado.telegram_id || '-'}</p>
+          <p><strong>E-mail:</strong> ${usuarioSelecionado.email || '-'}</p>
+          <p><strong>WhatsApp:</strong> ${usuarioSelecionado.whatsapp || '-'}</p>
+          <p><strong>Saldo:</strong> R$ ${parseFloat(usuarioSelecionado.saldo).toFixed(2)}</p>
+          <p><strong>Compras:</strong> ${usuarioSelecionado.compras || 0}</p>
+          <p><strong>Afiliado:</strong> ${usuarioSelecionado.afiliado ? 'Sim' : 'Não'}</p>
+          <p><strong>Status:</strong> ${usuarioSelecionado.status}</p>
+          <p><strong>Data de cadastro:</strong> ${usuarioSelecionado.data_cadastro || '-'}</p>
+        `;
+        abrirModal('modalVerUsuario');
+      } catch (error) {
+        alert('Erro ao carregar usuário.');
+        console.error('Erro:', error);
+      }
     }
 
-    function abrirAjusteSaldo(id) {
-      usuarioAtual = usuarios.find(u => u.id === id);
-      document.getElementById('ajusteValor').value = '';
-      document.getElementById('ajusteMotivo').value = '';
-      abrirModal('modalAjustarSaldo');
+    async function abrirAjusteSaldo(id) {
+      try {
+        const response = await fetch(`${API_URL}/users/${id}`);
+        if (!response.ok) throw new Error('Erro ao carregar usuário');
+        usuarioSelecionado = await response.json();
+        document.getElementById('ajusteValor').value = '';
+        document.getElementById('ajusteMotivo').value = '';
+        abrirModal('modalAjustarSaldo');
+      } catch (error) {
+        alert('Erro ao carregar usuário.');
+        console.error('Erro:', error);
+      }
     }
 
-    function confirmarAjuste() {
+    async function confirmarAjuste() {
       const valor = parseFloat(document.getElementById('ajusteValor').value);
       const motivo = document.getElementById('ajusteMotivo').value.trim();
       if (!valor || !motivo) {
         alert('Preencha valor e motivo.');
         return;
       }
-      // Simulação: ajustar saldo
-      usuarioAtual.saldo += valor;
-      renderizarTabela();
-      fecharModal('modalAjustarSaldo');
-      alert(`Saldo ajustado em R$ ${valor.toFixed(2)} para ${usuarioAtual.nome}. Motivo: ${motivo}`);
-      // Em produção: chamada à API com registro de auditoria
+      try {
+        const response = await fetch(`${API_URL}/users/${usuarioSelecionado.id}/wallet/adjust`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ valor, motivo })
+        });
+        if (!response.ok) throw new Error('Erro ao ajustar saldo');
+        fecharModal('modalAjustarSaldo');
+        carregarUsuarios(paginaAtual);
+        alert('Saldo ajustado com sucesso.');
+      } catch (error) {
+        alert('Erro ao ajustar saldo.');
+        console.error('Erro:', error);
+      }
     }
 
-    function toggleStatus(id) {
-      const user = usuarios.find(u => u.id === id);
-      user.status = user.status === 'ativo' ? 'bloqueado' : 'ativo';
-      renderizarTabela();
-      alert(`Usuário ${user.nome} agora está ${user.status}.`);
+    async function toggleStatus(id, statusAtual) {
+      const novoStatus = statusAtual === 'ativo' ? 'bloqueado' : 'ativo';
+      try {
+        const response = await fetch(`${API_URL}/users/${id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: novoStatus })
+        });
+        if (!response.ok) throw new Error('Erro ao alterar status');
+        carregarUsuarios(paginaAtual);
+      } catch (error) {
+        alert('Erro ao alterar status.');
+        console.error('Erro:', error);
+      }
     }
 
-    function abrirEnvioMensagem(id) {
-      usuarioAtual = usuarios.find(u => u.id === id);
-      document.getElementById('mensagemTexto').value = '';
-      abrirModal('modalEnviarMensagem');
+    async function abrirEnvioMensagem(id) {
+      try {
+        const response = await fetch(`${API_URL}/users/${id}`);
+        if (!response.ok) throw new Error('Erro ao carregar usuário');
+        usuarioSelecionado = await response.json();
+        document.getElementById('mensagemTexto').value = '';
+        abrirModal('modalEnviarMensagem');
+      } catch (error) {
+        alert('Erro ao carregar usuário.');
+        console.error('Erro:', error);
+      }
     }
 
-    function confirmarEnvioMensagem() {
+    async function confirmarEnvioMensagem() {
       const texto = document.getElementById('mensagemTexto').value.trim();
       if (!texto) {
         alert('Digite a mensagem.');
         return;
       }
-      // Simulação
-      fecharModal('modalEnviarMensagem');
-      alert(`Mensagem enviada para ${usuarioAtual.nome}: "${texto}"`);
-    }
-
-    function confirmarNovoUsuario() {
-      const nome = document.getElementById('novoNome').value.trim();
-      const email = document.getElementById('novoEmail').value.trim();
-      const telegramId = document.getElementById('novoTelegramId').value.trim();
-      if (!nome || !email) {
-        alert('Preencha nome e e-mail.');
-        return;
+      try {
+        const response = await fetch(`${API_URL}/users/${usuarioSelecionado.id}/message`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mensagem: texto })
+        });
+        if (!response.ok) throw new Error('Erro ao enviar mensagem');
+        fecharModal('modalEnviarMensagem');
+        alert('Mensagem enviada.');
+      } catch (error) {
+        alert('Erro ao enviar mensagem.');
+        console.error('Erro:', error);
       }
-      const novoId = usuarios.length ? Math.max(...usuarios.map(u => u.id)) + 1 : 1;
-      usuarios.push({
-        id: novoId,
-        nome,
-        username: '@' + nome.toLowerCase().replace(/ /g, '_'),
-        telegramId: telegramId ? parseInt(telegramId) : null,
-        email,
-        whatsapp: '',
-        saldo: 0,
-        compras: 0,
-        afiliado: false,
-        status: 'ativo',
-        data: new Date().toISOString().slice(0,10)
-      });
-      fecharModal('modalNovoUsuario');
-      document.getElementById('novoNome').value = '';
-      document.getElementById('novoEmail').value = '';
-      document.getElementById('novoTelegramId').value = '';
-      renderizarTabela();
-      alert(`Usuário ${nome} criado com sucesso.`);
-    }
-
-    // ===== FILTROS =====
-    function filtrarUsuarios() {
-      const termo = document.getElementById('searchInput').value.toLowerCase();
-      const status = document.getElementById('statusFilter').value;
-      const afiliado = document.getElementById('afiliadoFilter').value;
-
-      const filtrados = usuarios.filter(u => {
-        const matchTermo = termo === '' || u.nome.toLowerCase().includes(termo) || u.email.toLowerCase().includes(termo) || u.username.toLowerCase().includes(termo);
-        const matchStatus = status === '' || u.status === status;
-        const matchAfiliado = afiliado === '' || (afiliado === 'sim' && u.afiliado) || (afiliado === 'nao' && !u.afiliado);
-        return matchTermo && matchStatus && matchAfiliado;
-      });
-
-      // Substituir lista temporariamente para exibição filtrada
-      const originalUsuarios = usuarios;
-      usuarios = filtrados;
-      paginaAtual = 1;
-      renderizarTabela();
-      usuarios = originalUsuarios; // restaurar após renderizar (mas não ideal, melhor usar variável separada)
     }
 
     // ===== MODAL =====
-    function abrirModal(id) {
-      document.getElementById(id).classList.add('show');
-    }
-
-    function fecharModal(id) {
-      document.getElementById(id).classList.remove('show');
-    }
-
-    // Fechar modal clicando fora
+    function abrirModal(id) { document.getElementById(id).classList.add('show'); }
+    function fecharModal(id) { document.getElementById(id).classList.remove('show'); }
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
       overlay.addEventListener('click', function(e) {
-        if (e.target === this) {
-          this.classList.remove('show');
-        }
+        if (e.target === this) this.classList.remove('show');
       });
     });
 
-    // ===== SIDEBAR TOGGLE =====
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebar = document.getElementById('sidebar');
-    sidebarToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
-
     // ===== INICIAR =====
-    renderizarTabela();
+    carregarUsuarios(1);
   </script>
-
 </body>
 </html>
