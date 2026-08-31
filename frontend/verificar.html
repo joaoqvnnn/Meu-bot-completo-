@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verificar Conta | Larizinha Store</title>
+  <meta name="description" content="Verifique sua conta na Larizinha Store inserindo o código enviado para seu e-mail ou WhatsApp." />
+  <style>
+    /* ===== RESET & BASE ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0b0e14;
+      --bg-card: #121722;
+      --bg-card-hover: #1a2230;
+      --primary: #7c5cff;
+      --primary-hover: #967aff;
+      --accent: #00d4aa;
+      --text-primary: #f0f2f5;
+      --text-secondary: #aab2c5;
+      --border: #232a38;
+      --radius: 12px;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    a {
+      text-decoration: none;
+      color: var(--primary);
+      transition: color 0.3s;
+    }
+
+    a:hover {
+      color: var(--primary-hover);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: rgba(11, 14, 20, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+      font-size: 0.95rem;
+      background: transparent;
+      color: var(--text-primary);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(124, 92, 255, 0.3);
+    }
+
+    /* ===== VERIFY SECTION ===== */
+    .verify-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .verify-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 40px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: var(--shadow);
+    }
+
+    .verify-card h2 {
+      text-align: center;
+      margin-bottom: 8px;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .verify-subtitle {
+      text-align: center;
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+    }
+
+    .code-inputs {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+
+    .code-input {
+      width: 50px;
+      height: 60px;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .code-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.2);
+    }
+
+    .btn-verificar {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn-verificar:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-verificar:active {
+      transform: translateY(0);
+    }
+
+    .resend-link {
+      text-align: center;
+      margin-top: 20px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* ===== MENSAGENS ===== */
+    .error-message {
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid rgba(255, 0, 0, 0.3);
+      color: #ff6b6b;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    .success-message {
+      background: rgba(0, 212, 170, 0.1);
+      border: 1px solid rgba(0, 212, 170, 0.3);
+      color: var(--accent);
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      padding: 20px 0;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      margin: 0 10px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 480px) {
+      .verify-card {
+        padding: 25px;
+      }
+      .code-input {
+        width: 40px;
+        height: 50px;
+        font-size: 1.5rem;
+      }
+      .navbar {
+        height: 60px;
+      }
+      .logo {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container navbar">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🛍️</span>
+        Larizinha Store
+      </a>
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-outline">Entrar</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- VERIFY FORM -->
+  <main class="verify-wrapper">
+    <div class="verify-card">
+      <h2>Verificar conta</h2>
+      <p class="verify-subtitle">Digite o código de 6 dígitos enviado para seu e-mail</p>
+
+      <!-- Mensagens -->
+      <div id="errorMessage" class="error-message"></div>
+      <div id="successMessage" class="success-message"></div>
+
+      <form id="verifyForm">
+        <div class="code-inputs" id="codeInputs">
+          <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+          <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+          <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+          <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+          <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+          <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+        </div>
+
+        <button type="submit" class="btn-verificar" id="verificarButton">Verificar</button>
+      </form>
+
+      <p class="resend-link">
+        Não recebeu o código? <a href="#" id="resendLink">Reenviar código</a>
+      </p>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <p>© 2025 Larizinha Store. Todos os direitos reservados.</p>
+      <p>
+        <a href="#">Termos de Uso</a>
+        <a href="#">Privacidade</a>
+        <a href="#">Suporte</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // ===== LÓGICA DOS CAMPOS DE CÓDIGO =====
+    const inputs = document.querySelectorAll('.code-input');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+
+    // Auto-avançar para próximo campo
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', function () {
+        if (this.value.length === 1 && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+        // Se apagar, volta para o anterior
+        if (this.value.length === 0 && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+
+      // Pressionar Backspace quando campo vazio volta ao anterior
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+
+      // Permitir apenas números
+      input.addEventListener('keypress', function (e) {
+        if (!/[0-9]/.test(e.key)) {
+          e.preventDefault();
+        }
+      });
+    });
+
+    // ===== VERIFICAÇÃO SIMULADA =====
+    document.getElementById('verifyForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Resetar mensagens
+      errorMessage.classList.remove('show');
+      successMessage.classList.remove('show');
+
+      // Coletar código
+      let code = '';
+      inputs.forEach(input => {
+        code += input.value;
+      });
+
+      if (code.length !== 6) {
+        showError('Digite o código completo de 6 dígitos.');
+        return;
+      }
+
+      // Em produção, chamada à API:
+      // fetch('/api/auth/verify', { method: 'POST', body: JSON.stringify({ code }) })
+      //   .then(...)
+
+      // Simulação: aceita qualquer código "123456"
+      if (code === '123456') {
+        showSuccess('Conta verificada com sucesso! Redirecionando...');
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 2000);
+      } else {
+        showError('Código inválido. Tente novamente.');
+      }
+    });
+
+    // Reenviar código (simulado)
+    document.getElementById('resendLink').addEventListener('click', function (e) {
+      e.preventDefault();
+      showSuccess('Novo código enviado para seu e-mail!');
+      // Limpar campos
+      inputs.forEach(input => input.value = '');
+      inputs[0].focus();
+    });
+
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.classList.add('show');
+    }
+
+    function showSuccess(message) {
+      successMessage.textContent = message;
+      successMessage.classList.add('show');
+    }
+  </script>
+
+</body>
+</html>
